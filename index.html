@@ -43,7 +43,7 @@
             background-image: url('https://z-cdn-media.chatglm.cn/files/d7c54bf6-dce5-4543-8246-39d6dbde2c1a.jpg?auth_key=1887164088-f133e33049bb417b89a577f552575d70-0-48ed1067f5c7848767474b9b68cfbfc3');
             background-size: cover;
             background-position: center;
-            animation: panZoom 12s infinite alternate ease-in-out; /* Sped up to 12s */
+            animation: panZoom 12s infinite alternate ease-in-out;
             z-index: -1;
         }
 
@@ -160,8 +160,20 @@
             opacity: 0;
         }
 
+        /* Hero Buttons Layout */
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
+        }
+
         .btn {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             background-color: var(--primary-color);
             color: white;
             padding: 0.8rem 2rem;
@@ -173,14 +185,25 @@
             cursor: pointer;
             font-size: 1rem;
             box-shadow: 0 0 15px rgba(229, 9, 20, 0.5);
-            position: relative;
-            z-index: 2;
         }
 
         .btn:hover {
             background-color: var(--secondary-color);
             transform: translateY(-3px);
             box-shadow: 0 5px 20px rgba(229, 9, 20, 0.7);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--terminal-green);
+            color: var(--terminal-green);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--terminal-green);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
         }
 
         .terminal-section {
@@ -321,6 +344,33 @@
             max-width: 800px;
             margin: 0 auto;
             text-align: center;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+        }
+
+        .resume-link-wrapper {
+            margin-top: 2rem;
+        }
+
+        .resume-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--terminal-green);
+            text-decoration: none;
+            font-weight: bold;
+            border: 1px solid var(--terminal-green);
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .resume-link:hover {
+            background-color: var(--terminal-green);
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
         }
 
         .leadership { background-color: rgba(10, 10, 10, 0.92); }
@@ -629,7 +679,7 @@
             left: -10px;
             width: 20px;
             height: 20px;
-            background-color: rgba(20, 20, 20, 0.95);
+            background-color: rgba(20,20,20,0.95);
             transform: rotate(45deg);
             z-index: -1;
             border-left: 1px solid var(--primary-color);
@@ -891,7 +941,12 @@
         <div class="hero-content">
             <h1>Hi, I'm <span>Sanjay M</span></h1>
             <p id="hero-subtitle">Aspiring Cybersecurity Student | Ethical Hacker | CTF Enthusiast</p>
-            <a href="#about" class="btn">Learn More About Me</a>
+            <div class="hero-buttons">
+                <a href="#about" class="btn">Learn More About Me</a>
+                <a href="resume.pdf" target="_blank" class="btn btn-secondary">
+                    <i class="fas fa-file-pdf"></i> View & Download Resume
+                </a>
+            </div>
         </div>
     </section>
 
@@ -928,8 +983,12 @@
             <div class="about-content">
                 <div class="about-text">
                     <p>I'm a passionate fourth-year Cybersecurity student with a strong foundation in ethical hacking, CTFs, and bug bounty programs. Skilled in Java programming with a focus on secure coding principles and application security.</p>
-                    <br>
                     <p>Currently pursuing my B.E. in Computer Science (Cyber Security) at PSNA College of Engineering and Technology with a CGPA of 8.57. I'm actively seeking opportunities to apply my skills and contribute to the cybersecurity community.</p>
+                </div>
+                <div class="resume-link-wrapper">
+                    <a href="resume.pdf" target="_blank" class="resume-link">
+                        <i class="fas fa-download"></i> Download My Full Resume
+                    </a>
                 </div>
             </div>
         </div>
@@ -1530,7 +1589,7 @@
             whoami: "sanjay",
             "cat about.txt": "A passionate 4th-year Cybersecurity student. Scroll down to learn more!",
             "cat contact.txt": "Email: sanjaymeenakumar06@gmail.com\nPhone: +91 6374404194\nLocation: Madurai, Tamil Nadu, India",
-            "cat resume.pdf": "Downloading resume... (Just kidding, check the Contact section!)",
+            "cat resume.pdf": "Opening resume... (Click the 'View & Download Resume' button at the top!)",
             "ls -la": "drwxr-xr-x  2 sanjay sanjay 4096 Jan  1 12:00 .\ndrwxr-xr-x  3 root  root  4096 Jan  1 12:00 ..\n-rw-r--r--  1 sanjay sanjay  512 Jan  1 12:00 about.txt\n-rw-r--r--  1 sanjay sanjay  512 Jan  1 12:00 contact.txt\n-rw-r--r--  1 sanjay sanjay  512 Jan  1 12:00 resume.pdf",
             echo: "Usage: echo [string]"
         };
