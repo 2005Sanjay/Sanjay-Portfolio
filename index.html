@@ -7,14 +7,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #e50914; /* Netflix red */
-            --secondary-color: #8b0000; /* Dark red */
-            --dark-color: #141414; /* Dark black */
-            --darker-color: #000000; /* Pure black */
+            --primary-color: #e50914;
+            --secondary-color: #8b0000;
+            --dark-color: #141414;
+            --darker-color: #000000;
             --light-color: #f8f8f8;
-            --text-color: #e6e6e6; /* Light gray text */
-            --terminal-green: #00ff00; /* Terminal green */
-            --code-blue: #569cd6; /* Code blue */
+            --text-color: #e6e6e6;
+            --terminal-green: #00ff00;
+            --code-blue: #569cd6;
         }
 
         * {
@@ -27,8 +27,29 @@
             font-family: 'Courier New', monospace;
             line-height: 1.6;
             color: var(--text-color);
-            background-color: var(--darker-color);
+            background-color: #000;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Global Dynamic Background Layer */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            background-image: url('https://z-cdn-media.chatglm.cn/files/d7c54bf6-dce5-4543-8246-39d6dbde2c1a.jpg?auth_key=1887164088-f133e33049bb417b89a577f552575d70-0-48ed1067f5c7848767474b9b68cfbfc3');
+            background-size: cover;
+            background-position: center;
+            animation: panZoom 12s infinite alternate ease-in-out; /* Sped up to 12s */
+            z-index: -1;
+        }
+
+        @keyframes panZoom {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.15) translate(-2%, 2%); }
         }
 
         .container {
@@ -38,9 +59,8 @@
             padding: 0 20px;
         }
 
-        /* Header & Navigation */
         header {
-            background-color: var(--dark-color);
+            background-color: rgba(10, 10, 10, 0.95);
             color: white;
             padding: 1rem 0;
             position: fixed;
@@ -49,6 +69,7 @@
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
             border-bottom: 2px solid var(--primary-color);
+            backdrop-filter: blur(5px);
         }
 
         nav {
@@ -85,18 +106,16 @@
             text-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
         }
 
-        /* Hero Section */
         .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
-            background-size: cover;
-            background-position: center;
+            position: relative;
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             color: white;
-            position: relative;
+            overflow: hidden;
+            background-color: transparent;
         }
 
         .hero::before {
@@ -106,14 +125,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, rgba(229, 9, 20, 0.2) 0%, rgba(0, 0, 0, 0.8) 100%);
+            background: radial-gradient(circle at center, rgba(229, 9, 20, 0.2) 0%, rgba(0, 0, 0, 0.85) 100%);
+            z-index: 1;
         }
 
         .hero-content {
             max-width: 800px;
             margin: 0 auto;
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
         .hero h1 {
@@ -131,6 +151,13 @@
             font-size: 1.2rem;
             margin-bottom: 2rem;
             text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+            min-height: 1.5em;
+            transition: opacity 0.5s ease-in-out;
+            opacity: 1;
+        }
+
+        .hero p.fade-out {
+            opacity: 0;
         }
 
         .btn {
@@ -156,17 +183,18 @@
             box-shadow: 0 5px 20px rgba(229, 9, 20, 0.7);
         }
 
-        /* Terminal Section between Hero and About */
         .terminal-section {
-            background-color: var(--darker-color);
+            background-color: rgba(0, 0, 0, 0.8);
             padding: 3rem 0;
             display: flex;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(3px);
         }
 
         .hero-terminal {
-            width: 500px;
+            width: 600px;
+            max-width: 90%;
             background-color: rgba(0, 0, 0, 0.9);
             border: 1px solid var(--terminal-green);
             border-radius: 5px;
@@ -204,55 +232,63 @@
             margin-left: 5px;
         }
 
-        .hero-terminal-button.close {
-            background-color: #ff5f56;
-        }
-
-        .hero-terminal-button.minimize {
-            background-color: #ffbd2e;
-        }
-
-        .hero-terminal-button.maximize {
-            background-color: #27c93f;
-        }
+        .hero-terminal-button.close { background-color: #ff5f56; }
+        .hero-terminal-button.minimize { background-color: #ffbd2e; }
+        .hero-terminal-button.maximize { background-color: #27c93f; }
 
         .hero-terminal-body {
             font-size: 14px;
             text-align: left;
+            min-height: 120px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .hero-terminal-body::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .hero-terminal-body::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        .hero-terminal-body::-webkit-scrollbar-thumb {
+            background: var(--terminal-green);
         }
 
         .hero-terminal-line {
             margin-bottom: 5px;
-            white-space: nowrap;
-            overflow: hidden;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
 
         .hero-terminal-prompt {
             color: var(--primary-color);
         }
 
-        .hero-terminal-cursor {
-            display: inline-block;
-            width: 8px;
-            height: 16px;
-            background-color: var(--terminal-green);
-            animation: blink 1s infinite;
+        .terminal-input-line {
+            display: flex;
+            align-items: center;
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+        .terminal-input {
+            background: none;
+            border: none;
+            color: var(--terminal-green);
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            outline: none;
+            width: 100%;
+            padding-left: 5px;
+            caret-color: var(--terminal-green);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Section Styling */
         section {
             padding: 5rem 0;
-            background-color: var(--dark-color);
+            background-color: rgba(10, 10, 10, 0.92);
+            backdrop-filter: blur(4px);
         }
 
         .section-title {
@@ -279,44 +315,15 @@
             background-color: var(--primary-color);
         }
 
-        /* About Section */
-        .about {
-            background-color: var(--darker-color);
-            margin-top: 0; /* Remove negative margin */
-        }
+        .about { background-color: rgba(0, 0, 0, 0.92); }
 
         .about-content {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .about-text {
-            flex: 2;
-        }
-
-        .about-image {
-            flex: 1;
+            max-width: 800px;
+            margin: 0 auto;
             text-align: center;
-            position: relative;
         }
 
-        .about-image img {
-            max-width: 200px;
-            border-radius: 10px;
-            border: 3px solid var(--primary-color);
-            box-shadow: 0 0 20px rgba(229, 9, 20, 0.5);
-            /* Passport size adjustment - show only upper body */
-            height: 250px;
-            width: 200px;
-            object-fit: cover;
-            object-position: top center;
-        }
-
-        /* Leadership Section */
-        .leadership {
-            background-color: var(--dark-color);
-        }
+        .leadership { background-color: rgba(10, 10, 10, 0.92); }
 
         .leadership-container {
             display: grid;
@@ -325,7 +332,7 @@
         }
 
         .leadership-card {
-            background-color: rgba(20, 20, 20, 0.8);
+            background-color: rgba(20, 20, 20, 0.9);
             border: 1px solid rgba(229, 9, 20, 0.3);
             border-radius: 10px;
             padding: 2rem;
@@ -353,7 +360,6 @@
             text-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
         }
 
-        /* Skills Section */
         .skills-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -361,7 +367,7 @@
         }
 
         .skill-card {
-            background-color: rgba(20, 20, 20, 0.8);
+            background-color: rgba(20, 20, 20, 0.9);
             border: 1px solid rgba(229, 9, 20, 0.3);
             border-radius: 10px;
             padding: 2rem;
@@ -382,9 +388,7 @@
             text-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
         }
 
-        .skill-list {
-            list-style: none;
-        }
+        .skill-list { list-style: none; }
 
         .skill-list li {
             margin-bottom: 0.5rem;
@@ -397,109 +401,74 @@
             margin-right: 0.5rem;
         }
 
-        /* Security & Development Showcase */
-        .showcase {
-            background-color: var(--darker-color);
-        }
+        .patent { background-color: rgba(0, 0, 0, 0.92); }
 
-        .showcase-container {
+        .patent-card {
+            background-color: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(229, 9, 20, 0.4);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s;
             display: flex;
-            gap: 2rem;
+            gap: 1.5rem;
+            align-items: flex-start;
         }
 
-        .showcase-terminal, .showcase-code {
-            flex: 1;
-            background-color: rgba(20, 20, 20, 0.8);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(229, 9, 20, 0.3);
+        .patent-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(229, 9, 20, 0.3);
+            border-color: var(--primary-color);
         }
 
-        .showcase-header {
-            background-color: var(--dark-color);
-            padding: 0.8rem 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(229, 9, 20, 0.3);
+        .patent-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            flex-shrink: 0;
+            text-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
         }
 
-        .showcase-title {
+        .patent-content h3 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
+        }
+
+        .patent-number {
+            display: inline-block;
+            background-color: rgba(229, 9, 20, 0.15);
+            color: var(--primary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(229, 9, 20, 0.4);
             font-weight: bold;
-            color: var(--primary-color);
         }
 
-        .showcase-buttons {
+        .patent-content p {
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+        }
+
+        .patent-tags {
             display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
         }
 
-        .showcase-button {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-left: 5px;
-        }
-
-        .showcase-button.close {
-            background-color: #ff5f56;
-        }
-
-        .showcase-button.minimize {
-            background-color: #ffbd2e;
-        }
-
-        .showcase-button.maximize {
-            background-color: #27c93f;
-        }
-
-        .showcase-body {
-            padding: 1rem;
-            height: 300px;
-            overflow-y: auto;
-            font-family: 'Courier New', monospace;
-        }
-
-        .terminal-body {
+        .patent-tag {
+            background-color: rgba(0, 255, 0, 0.1);
             color: var(--terminal-green);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(0, 255, 0, 0.3);
         }
 
-        .terminal-line {
-            margin-bottom: 0.5rem;
-        }
-
-        .terminal-prompt {
-            color: var(--primary-color);
-        }
-
-        .code-body {
-            color: var(--text-color);
-        }
-
-        .code-line {
-            margin-bottom: 0.5rem;
-        }
-
-        .code-comment {
-            color: #6a9955;
-        }
-
-        .code-keyword {
-            color: #569cd6;
-        }
-
-        .code-string {
-            color: #ce9178;
-        }
-
-        .code-function {
-            color: #dcdcaa;
-        }
-
-        /* Projects Section */
-        .projects {
-            background-color: var(--darker-color);
-        }
+        .projects { background-color: rgba(10, 10, 10, 0.92); }
 
         .projects-container {
             display: grid;
@@ -508,7 +477,7 @@
         }
 
         .project-card {
-            background-color: rgba(20, 20, 20, 0.8);
+            background-color: rgba(20, 20, 20, 0.9);
             border: 1px solid rgba(229, 9, 20, 0.3);
             border-radius: 10px;
             overflow: hidden;
@@ -532,9 +501,7 @@
             font-size: 3rem;
         }
 
-        .project-content {
-            padding: 1.5rem;
-        }
+        .project-content { padding: 1.5rem; }
 
         .project-content h3 {
             color: var(--primary-color);
@@ -556,18 +523,15 @@
             text-decoration: underline;
         }
 
-        /* Achievements Section */
-        .achievements {
-            background-color: var(--dark-color);
-        }
+        .achievements { background-color: rgba(10, 10, 10, 0.92); }
 
         .achievements-container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
         .achievement-item {
-            background-color: rgba(20, 20, 20, 0.8);
+            background-color: rgba(20, 20, 20, 0.9);
             border-left: 4px solid var(--primary-color);
             padding: 1.5rem;
             margin-bottom: 1.5rem;
@@ -594,10 +558,7 @@
             text-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
         }
 
-        /* Experience Section */
-        .experience {
-            background-color: var(--darker-color);
-        }
+        .experience { background-color: rgba(0, 0, 0, 0.92); }
 
         .timeline {
             position: relative;
@@ -634,7 +595,7 @@
         }
 
         .timeline-content {
-            background-color: rgba(20, 20, 20, 0.8);
+            background-color: rgba(20, 20, 20, 0.95);
             padding: 1.5rem;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
@@ -654,7 +615,7 @@
             right: -10px;
             width: 20px;
             height: 20px;
-            background-color: rgba(20, 20, 20, 0.8);
+            background-color: rgba(20, 20, 20, 0.95);
             transform: rotate(45deg);
             z-index: -1;
             border-right: 1px solid var(--primary-color);
@@ -668,7 +629,7 @@
             left: -10px;
             width: 20px;
             height: 20px;
-            background-color: rgba(20, 20, 20, 0.8);
+            background-color: rgba(20, 20, 20, 0.95);
             transform: rotate(45deg);
             z-index: -1;
             border-left: 1px solid var(--primary-color);
@@ -692,49 +653,129 @@
             margin-bottom: 1rem;
         }
 
-        /* Certifications Section */
-        .certifications {
-            background-color: var(--dark-color);
-        }
+        .certifications { background-color: rgba(10, 10, 10, 0.92); }
 
         .certifications-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
         }
 
         .certification-card {
-            background-color: rgba(20, 20, 20, 0.8);
+            background-color: rgba(20, 20, 20, 0.9);
             border-left: 4px solid var(--primary-color);
             padding: 1.5rem;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
         }
 
         .certification-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(229, 9, 20, 0.3);
+            box-shadow: 0 10px 25px rgba(229, 9, 20, 0.4);
+            border-color: var(--primary-color);
         }
 
         .certification-card h3 {
             color: var(--primary-color);
             margin-bottom: 0.5rem;
             text-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
+            font-size: 1.1rem;
         }
 
-        /* Contact Section */
+        .certification-card p {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .certification-click-hint {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 1rem;
+            color: var(--terminal-green);
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        .certificate-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.92);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .certificate-modal.active {
+            display: flex;
+        }
+
+        .certificate-modal-content {
+            max-width: 90%;
+            max-height: 90vh;
+            position: relative;
+            text-align: center;
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .certificate-modal-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            border: 3px solid var(--primary-color);
+            border-radius: 8px;
+            box-shadow: 0 0 40px rgba(229, 9, 20, 0.6);
+        }
+
+        .certificate-modal-title {
+            color: var(--primary-color);
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .certificate-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background-color: var(--primary-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .certificate-close:hover {
+            background-color: var(--secondary-color);
+            transform: rotate(90deg);
+        }
+
+        .contact { background-color: rgba(0, 0, 0, 0.92); }
+
         .contact-container {
             display: flex;
             gap: 2rem;
         }
 
-        .contact-info {
-            flex: 1;
-        }
-
-        .contact-form {
-            flex: 1;
-        }
+        .contact-info { flex: 1; }
+        .contact-form { flex: 1; }
 
         .contact-item {
             display: flex;
@@ -767,7 +808,7 @@
             border: 1px solid rgba(229, 9, 20, 0.3);
             border-radius: 5px;
             font-family: inherit;
-            background-color: rgba(20, 20, 20, 0.8);
+            background-color: rgba(20, 20, 20, 0.9);
             color: var(--text-color);
         }
 
@@ -778,9 +819,8 @@
             box-shadow: 0 0 10px rgba(229, 9, 20, 0.3);
         }
 
-        /* Footer */
         footer {
-            background-color: var(--darker-color);
+            background-color: rgba(0, 0, 0, 0.98);
             color: white;
             text-align: center;
             padding: 2rem 0;
@@ -804,32 +844,11 @@
             text-shadow: 0 0 10px rgba(229, 9, 20, 0.7);
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero-terminal {
-                width: 90%;
-            }
-
-            .about-content {
-                flex-direction: column;
-            }
-
-            .showcase-container {
-                flex-direction: column;
-            }
-
-            .timeline::before {
-                left: 20px;
-            }
-
+            .nav-links { display: none; }
+            .hero h1 { font-size: 2rem; }
+            .hero-terminal { width: 90%; }
+            .timeline::before { left: 20px; }
             .timeline-item {
                 width: 100%;
                 left: 0 !important;
@@ -837,16 +856,13 @@
                 padding-right: 0 !important;
                 text-align: left !important;
             }
-
             .timeline-item:nth-child(odd) .timeline-content::after,
             .timeline-item:nth-child(even) .timeline-content::after {
                 left: 10px !important;
                 right: auto !important;
             }
-
-            .contact-container {
-                flex-direction: column;
-            }
+            .contact-container { flex-direction: column; }
+            .patent-card { flex-direction: column; }
         }
     </style>
 </head>
@@ -860,7 +876,7 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#leadership">Leadership</a></li>
                 <li><a href="#skills">Skills</a></li>
-                <li><a href="#showcase">Showcase</a></li>
+                <li><a href="#patent">Patent</a></li>
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#achievements">Achievements</a></li>
                 <li><a href="#experience">Experience</a></li>
@@ -874,14 +890,14 @@
     <section id="home" class="hero">
         <div class="hero-content">
             <h1>Hi, I'm <span>Sanjay M</span></h1>
-            <p>Aspiring Cybersecurity Student | Ethical Hacker | CTF Enthusiast</p>
+            <p id="hero-subtitle">Aspiring Cybersecurity Student | Ethical Hacker | CTF Enthusiast</p>
             <a href="#about" class="btn">Learn More About Me</a>
         </div>
     </section>
 
-    <!-- Terminal Section between Hero and About -->
+    <!-- Interactive Terminal Section -->
     <section class="terminal-section">
-        <div class="hero-terminal">
+        <div class="hero-terminal" id="heroTerminal">
             <div class="hero-terminal-header">
                 <div class="hero-terminal-title">Terminal - sanjay@portfolio:~</div>
                 <div class="hero-terminal-buttons">
@@ -890,12 +906,15 @@
                     <div class="hero-terminal-button maximize"></div>
                 </div>
             </div>
-            <div class="hero-terminal-body">
+            <div class="hero-terminal-body" id="terminalBody">
                 <div class="hero-terminal-line"><span class="hero-terminal-prompt">sanjay@portfolio:~$</span> ./access_portfolio.sh</div>
                 <div class="hero-terminal-line">[sudo] password for sanjay: ********</div>
                 <div class="hero-terminal-line">Access granted...</div>
-                <div class="hero-terminal-line">Permitting me to showcase my skills...</div>
-                <div class="hero-terminal-line"><span class="hero-terminal-prompt">sanjay@portfolio:~$</span> <span class="hero-terminal-cursor"></span></div>
+                <div class="hero-terminal-line">Type 'help' to list available commands.</div>
+            </div>
+            <div class="terminal-input-line">
+                <span class="hero-terminal-prompt">sanjay@portfolio:~$</span>
+                <input type="text" class="terminal-input" id="terminalInput" autocomplete="off" spellcheck="false" autofocus>
             </div>
         </div>
     </section>
@@ -908,13 +927,9 @@
             </div>
             <div class="about-content">
                 <div class="about-text">
-                    <p>I'm a passionate third-year Cybersecurity student with a strong foundation in ethical hacking, CTFs, and bug bounty programs. My intermediate programming skills in Java, Python, and C/C++ complement my security knowledge, allowing me to approach challenges with a secure development mindset.</p>
-                    <p>I'm committed to designing, analyzing, and building efficient, secure software solutions. With a CGPA of 8.6 and several achievements in cybersecurity competitions, I continuously strive to expand my knowledge and skills in this rapidly evolving field.</p>
-                    <p>Currently pursuing my Bachelor's degree in Computer Science with a specialization in Cybersecurity at PSNA College of Engineering and Technology, I'm actively seeking opportunities to apply my skills and contribute to the cybersecurity community.</p>
-                </div>
-                <div class="about-image">
-                    <!-- Passport-sized photo showing only upper body -->
-                    <img src="https://z-cdn-media.chatglm.cn/files/afafd93a-0d53-426f-9459-6b8318462aa0.jpg?auth_key=1865041080-6bf393c0762342f3a6abd56dbd90306a-0-42a1337f8da8d16f81e46d15327812fa" alt="Sanjay M">
+                    <p>I'm a passionate fourth-year Cybersecurity student with a strong foundation in ethical hacking, CTFs, and bug bounty programs. Skilled in Java programming with a focus on secure coding principles and application security.</p>
+                    <br>
+                    <p>Currently pursuing my B.E. in Computer Science (Cyber Security) at PSNA College of Engineering and Technology with a CGPA of 8.57. I'm actively seeking opportunities to apply my skills and contribute to the cybersecurity community.</p>
                 </div>
             </div>
         </div>
@@ -951,38 +966,37 @@
                 <div class="skill-card">
                     <h3>Technical Skills</h3>
                     <ul class="skill-list">
-                        <li><i class="fas fa-check-circle"></i> Python (Intermediate)</li>
                         <li><i class="fas fa-check-circle"></i> Java (Intermediate)</li>
-                        <li><i class="fas fa-check-circle"></i> C (Intermediate)</li>
-                        <li><i class="fas fa-check-circle"></i> C++ (Intermediate)</li>
-                        <li><i class="fas fa-check-circle"></i> Data Structures (Intermediate)</li>
-                        <li><i class="fas fa-check-circle"></i> Networking (Intermediate)</li>
-                        <li><i class="fas fa-check-circle"></i> Operating System (Intermediate)</li>
-                        <li><i class="fas fa-check-circle"></i> DBMS (Intermediate)</li>
-                        <li><i class="fas fa-check-circle"></i> Linux (Intermediate)</li>
+                        <li><i class="fas fa-check-circle"></i> Networking</li>
+                        <li><i class="fas fa-check-circle"></i> SOC Fundamentals</li>
+                        <li><i class="fas fa-check-circle"></i> Web Application Pentesting</li>
+                        <li><i class="fas fa-check-circle"></i> Operating System</li>
+                        <li><i class="fas fa-check-circle"></i> Linux</li>
                     </ul>
                 </div>
                 <div class="skill-card">
                     <h3>Cybersecurity Tools</h3>
                     <ul class="skill-list">
-                        <li><i class="fas fa-check-circle"></i> Nmap</li>
                         <li><i class="fas fa-check-circle"></i> Burp Suite</li>
+                        <li><i class="fas fa-check-circle"></i> Nmap</li>
+                        <li><i class="fas fa-check-circle"></i> Nessus</li>
                         <li><i class="fas fa-check-circle"></i> Wireshark</li>
                         <li><i class="fas fa-check-circle"></i> Metasploit</li>
-                        <li><i class="fas fa-check-circle"></i> Hydra</li>
-                        <li><i class="fas fa-check-circle"></i> Hashcat</li>
-                        <li><i class="fas fa-check-circle"></i> OSINT tools</li>
+                        <li><i class="fas fa-check-circle"></i> OWASP ZAP</li>
+                        <li><i class="fas fa-check-circle"></i> Wazuh</li>
+                        <li><i class="fas fa-check-circle"></i> Splunk</li>
+                        <li><i class="fas fa-check-circle"></i> Git & GitHub</li>
                     </ul>
                 </div>
                 <div class="skill-card">
                     <h3>Soft Skills & Languages</h3>
                     <h4>Soft Skills</h4>
                     <ul class="skill-list">
-                        <li><i class="fas fa-check-circle"></i> Teamwork</li>
-                        <li><i class="fas fa-check-circle"></i> Time Management</li>
-                        <li><i class="fas fa-check-circle"></i> Leadership</li>
-                        <li><i class="fas fa-check-circle"></i> Effective Communication</li>
                         <li><i class="fas fa-check-circle"></i> Critical Thinking</li>
+                        <li><i class="fas fa-check-circle"></i> Effective Communication</li>
+                        <li><i class="fas fa-check-circle"></i> Teamwork</li>
+                        <li><i class="fas fa-check-circle"></i> Leadership</li>
+                        <li><i class="fas fa-check-circle"></i> Time Management</li>
                     </ul>
                     <h4>Languages</h4>
                     <ul class="skill-list">
@@ -995,56 +1009,29 @@
         </div>
     </section>
 
-    <!-- Security & Development Showcase -->
-    <section id="showcase" class="showcase">
+    <!-- Patent Section -->
+    <section id="patent" class="patent">
         <div class="container">
             <div class="section-title">
-                <h2>Security & Development Showcase</h2>
+                <h2>Patent</h2>
             </div>
-            <div class="showcase-container">
-                <div class="showcase-terminal">
-                    <div class="showcase-header">
-                        <div class="showcase-title">Security Terminal</div>
-                        <div class="showcase-buttons">
-                            <div class="showcase-button close"></div>
-                            <div class="showcase-button minimize"></div>
-                            <div class="showcase-button maximize"></div>
-                        </div>
-                    </div>
-                    <div class="showcase-body terminal-body">
-                        <div class="terminal-line"><span class="terminal-prompt">sanjay@security:~$</span> nmap -sV -O target.com</div>
-                        <div class="terminal-line">Starting Nmap 7.92 ( https://nmap.org )</div>
-                        <div class="terminal-line">Nmap scan report for target.com (192.168.1.1)</div>
-                        <div class="terminal-line">Host is up (0.021s latency).</div>
-                        <div class="terminal-line">Not shown: 998 closed ports</div>
-                        <div class="terminal-line">PORT   STATE SERVICE VERSION</div>
-                        <div class="terminal-line">22/tcp open  ssh     OpenSSH 8.2p1</div>
-                        <div class="terminal-line">80/tcp open  http    Apache 2.4.41</div>
-                        <div class="terminal-line"><span class="terminal-prompt">sanjay@security:~$</span> _</div>
-                    </div>
+            <div class="patent-card">
+                <div class="patent-icon">
+                    <i class="fas fa-lightbulb"></i>
                 </div>
-                <div class="showcase-code">
-                    <div class="showcase-header">
-                        <div class="showcase-title">Development Code</div>
-                        <div class="showcase-buttons">
-                            <div class="showcase-button close"></div>
-                            <div class="showcase-button minimize"></div>
-                            <div class="showcase-button maximize"></div>
-                        </div>
-                    </div>
-                    <div class="showcase-body code-body">
-                        <div class="code-line"><span class="code-comment">// Phishing Detection Algorithm</span></div>
-                        <div class="code-line"><span class="code-keyword">def</span> <span class="code-function">detect_phishing</span>(email_content):</div>
-                        <div class="code-line">    <span class="code-comment"># Extract features from email</span></div>
-                        <div class="code-line">    features = extract_features(email_content)</div>
-                        <div class="code-line">    </div>
-                        <div class="code-line">    <span class="code-comment"># Load trained model</span></div>
-                        <div class="code-line">    model = load_model(<span class="code-string">'phishing_model.pkl'</span>)</div>
-                        <div class="code-line">    </div>
-                        <div class="code-line">    <span class="code-comment"># Make prediction</span></div>
-                        <div class="code-line">    prediction = model.predict(features)</div>
-                        <div class="code-line">    </div>
-                        <div class="code-line">    <span class="code-keyword">return</span> prediction</div>
+                <div class="patent-content">
+                    <h3>PhishnetX - USB-Based Real-Time Phishing Detection System</h3>
+                    <span class="patent-number"><i class="fas fa-file-contract"></i> Patent Application Number: 202641086389</span>
+                    <p>Developed an ML-based phishing detection system using Python, Flask, TF-IDF, and Logistic Regression. Built a Chrome extension with image/PDF attachment analysis using OCR and document processing.</p>
+                    <p>Integrated Arduino-based USB hardware for real-time red/green LED alerts and submitted the prototype for patent.</p>
+                    <div class="patent-tags">
+                        <span class="patent-tag">Python</span>
+                        <span class="patent-tag">Flask</span>
+                        <span class="patent-tag">TF-IDF</span>
+                        <span class="patent-tag">Logistic Regression</span>
+                        <span class="patent-tag">OCR</span>
+                        <span class="patent-tag">Arduino</span>
+                        <span class="patent-tag">Chrome Extension</span>
                     </div>
                 </div>
             </div>
@@ -1134,8 +1121,17 @@
                         <i class="fas fa-trophy"></i>
                     </div>
                     <div class="achievement-content">
-                        <h3>57th Position - Crate-CTF 2025</h3>
-                        <p>Secured 57th position globally in the prestigious Crate-CTF 2025 competition, demonstrating advanced cybersecurity skills among international participants.</p>
+                        <h3>Hall of Fame - Modyo Security VDP</h3>
+                        <p>Recognized for responsible vulnerability disclosure through Modyo Security VDP.</p>
+                    </div>
+                </div>
+                <div class="achievement-item">
+                    <div class="achievement-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="achievement-content">
+                        <h3>Hall of Fame - Strong DM VDP</h3>
+                        <p>Recognized for responsible vulnerability disclosure through Strong DM VDP.</p>
                     </div>
                 </div>
                 <div class="achievement-item">
@@ -1144,7 +1140,7 @@
                     </div>
                     <div class="achievement-content">
                         <h3>1st Place - CTF</h3>
-                        <p>Organized by Department of CSE(Cyber Security), PSNACET</p>
+                        <p>Organized by Department of CSE (Cyber Security), PSNACET.</p>
                     </div>
                 </div>
                 <div class="achievement-item">
@@ -1153,7 +1149,16 @@
                     </div>
                     <div class="achievement-content">
                         <h3>2nd Place - Paper Presentation</h3>
-                        <p>National Level Symposium, PSNACET</p>
+                        <p>National Level Symposium, PSNACET.</p>
+                    </div>
+                </div>
+                <div class="achievement-item">
+                    <div class="achievement-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="achievement-content">
+                        <h3>4th Place - Root Access CTF</h3>
+                        <p>IIEST Shibpur.</p>
                     </div>
                 </div>
                 <div class="achievement-item">
@@ -1162,7 +1167,7 @@
                     </div>
                     <div class="achievement-content">
                         <h3>8th Place - Thiran CTF Quest</h3>
-                        <p>Held at Sri Eshwar Engineering College, Coimbatore</p>
+                        <p>Held at Sri Eshwar Engineering College, Coimbatore.</p>
                     </div>
                 </div>
                 <div class="achievement-item">
@@ -1171,7 +1176,16 @@
                     </div>
                     <div class="achievement-content">
                         <h3>9th Place - CyberTea 3.0 CTF</h3>
-                        <p>IIIT Sri City, Andhra Pradesh</p>
+                        <p>IIIT Sri City, Andhra Pradesh.</p>
+                    </div>
+                </div>
+                <div class="achievement-item">
+                    <div class="achievement-icon">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <div class="achievement-content">
+                        <h3>2nd Place - SPARC Virtual CTF</h3>
+                        <p>Organized by IEEE Signal Processing Society (BMSIT&M).</p>
                     </div>
                 </div>
             </div>
@@ -1187,18 +1201,26 @@
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="timeline-content">
+                        <div class="timeline-date">Jul 2026 - Present</div>
+                        <div class="timeline-title">Junior Security Analyst Intern</div>
+                        <div class="timeline-company">Ozone Cyber Security - Hybrid</div>
+                        <p>Researching vulnerabilities and analyzing security issues in web applications. Working with security testing tools and techniques to identify potential vulnerabilities.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-content">
                         <div class="timeline-date">Jan 2025 - Mar 2025</div>
                         <div class="timeline-title">Internship in Ethical Hacking</div>
                         <div class="timeline-company">Genz Educate Wing - Hybrid</div>
-                        <p>Gained hands-on experience in ethical hacking techniques, vulnerability assessment, and penetration testing methodologies.</p>
+                        <p>Studied common web application vulnerabilities and their potential security impact. Learned basic vulnerability identification and security testing techniques.</p>
                     </div>
                 </div>
                 <div class="timeline-item">
                     <div class="timeline-content">
                         <div class="timeline-date">Aug 2024 - Sep 2024</div>
                         <div class="timeline-title">Java Developer Intern</div>
-                        <div class="timeline-company">OctaNet Services, Hybrid</div>
-                        <p>Developed and maintained Java applications, focusing on secure coding practices and implementing security features.</p>
+                        <div class="timeline-company">OctaNet Services Pvt Ltd - Hybrid</div>
+                        <p>Worked on Java programming and application development tasks. Practiced object-oriented programming and basic software development concepts.</p>
                     </div>
                 </div>
                 <div class="timeline-item">
@@ -1206,7 +1228,7 @@
                         <div class="timeline-date">Jul 2024 - Aug 2024</div>
                         <div class="timeline-title">Cyber Security Intern</div>
                         <div class="timeline-company">Prodigy Infotech - Hybrid</div>
-                        <p>Assisted in security audits, threat analysis, and implemented security measures to protect organizational assets.</p>
+                        <p>Learned how keyloggers capture and monitor keyboard input in controlled environments. Explored security risks associated with keylogging and methods for identifying such threats.</p>
                     </div>
                 </div>
             </div>
@@ -1220,29 +1242,96 @@
                 <h2>Certifications</h2>
             </div>
             <div class="certifications-container">
-                <div class="certification-card">
-                    <h3>Ethical Hacking and Penetration Testing</h3>
+                <!-- Image Certificates (Will open in modal) -->
+                <div class="certification-card" data-certificate="https://z-cdn-media.chatglm.cn/files/e576daeb-726d-4194-8c26-c0b1c0e5c963.jpg?auth_key=1887159698-38a74474f7b4444bb51e0db7c7d943a4-0-3afda3141785342f4798276c83212f0c" data-title="Ethical Hacking and Penetration Testing (EHPT+) - Udemy">
+                    <h3>Ethical Hacking and Penetration Testing (EHPT+)</h3>
                     <p>Udemy</p>
+                    <div class="certification-click-hint">
+                        <i class="fas fa-eye"></i> Click to view certificate
+                    </div>
                 </div>
-                <div class="certification-card">
+                <div class="certification-card" data-certificate="https://z-cdn-media.chatglm.cn/files/39ec207f-c36c-4e24-9c0c-e5cb00dcd0b3.jpg?auth_key=1887159698-de86e0b292f74503b9a7026cf2d4caab-0-cdc237bb570820d23e755ac00077707f" data-title="Ethical Hacking Internship - GenZ EducateWing">
+                    <h3>Ethical Hacking Internship</h3>
+                    <p>GenZ EducateWing</p>
+                    <div class="certification-click-hint">
+                        <i class="fas fa-eye"></i> Click to view certificate
+                    </div>
+                </div>
+                <div class="certification-card" data-certificate="https://z-cdn-media.chatglm.cn/files/4eb192b9-85fb-4c3e-ab2d-1f5dfa70a7e5.jpg?auth_key=1887159698-d978561a76ea474b9714ae43278fcfeb-0-6c6cac53e7180a86aa60f5026e24dc7a" data-title="Java Development Internship - OctaNet Services">
+                    <h3>Java Development Internship</h3>
+                    <p>OctaNet Services Pvt Ltd</p>
+                    <div class="certification-click-hint">
+                        <i class="fas fa-eye"></i> Click to view certificate
+                    </div>
+                </div>
+                <div class="certification-card" data-certificate="https://z-cdn-media.chatglm.cn/files/ff7765b7-3b65-4c6b-a408-0bd08fe92327.jpg?auth_key=1887159698-1e120e1f04054bf697f48de1725da4ba-0-b20b4ab6c626b2d1439f277e41e27b32" data-title="Cyber Security Internship - Prodigy InfoTech">
+                    <h3>Cyber Security Internship</h3>
+                    <p>Prodigy InfoTech</p>
+                    <div class="certification-click-hint">
+                        <i class="fas fa-eye"></i> Click to view certificate
+                    </div>
+                </div>
+                <div class="certification-card" data-certificate="https://z-cdn-media.chatglm.cn/files/69b4c079-5c36-42ae-998a-032ebcdec4f8.jpg?auth_key=1887159698-7fb458797a9243698c95a0423e35f7a1-0-47fbfb361245ef2451778d90ec659b62" data-title="Virtualization and Cloud Computing - Prodigy Cloud">
+                    <h3>Virtualization and Cloud Computing</h3>
+                    <p>Prodigy Cloud</p>
+                    <div class="certification-click-hint">
+                        <i class="fas fa-eye"></i> Click to view certificate
+                    </div>
+                </div>
+                <div class="certification-card" data-certificate="https://z-cdn-media.chatglm.cn/files/07893232-d9a1-45e2-8f48-2e9f3292ab13.jpg?auth_key=1887159698-18a65b17efce43e8b0be359b1bd2f660-0-98ed55fce1b6b1743469400efd2a9ffd" data-title="Fundamentals of Information Security - Infosys">
+                    <h3>Fundamentals of Information Security</h3>
+                    <p>Infosys</p>
+                    <div class="certification-click-hint">
+                        <i class="fas fa-eye"></i> Click to view certificate
+                    </div>
+                </div>
+                <div class="certification-card" data-certificate="https://z-cdn-media.chatglm.cn/files/8e23b8d0-e3c8-491a-bc97-ce3ff22a8a22.jpg?auth_key=1887159698-48d451ccc89e4cb2ae9a9df336c5df9b-0-b96a801df372c18de66b166fa2166501" data-title="Introduction to Cyber Security - Cisco">
                     <h3>Introduction to Cyber Security</h3>
                     <p>Cisco</p>
+                    <div class="certification-click-hint">
+                        <i class="fas fa-eye"></i> Click to view certificate
+                    </div>
                 </div>
-                <div class="certification-card">
-                    <h3>Cyber Security Essentials</h3>
+                <div class="certification-card" data-certificate="https://z-cdn-media.chatglm.cn/files/4b4da2d9-a911-4b68-a793-deb928a4c87e.jpg?auth_key=1887159698-b321a8df312c4dc38df1baa63ca99813-0-d8b5426a6b9bb1d7c36919909be044b1" data-title="Cybersecurity Essentials - Cisco">
+                    <h3>Cybersecurity Essentials</h3>
                     <p>Cisco</p>
+                    <div class="certification-click-hint">
+                        <i class="fas fa-eye"></i> Click to view certificate
+                    </div>
                 </div>
-                <div class="certification-card">
+                <div class="certification-card" data-certificate="https://z-cdn-media.chatglm.cn/files/417d3f6c-4db5-4455-9e9a-18ac959be5aa.jpg?auth_key=1887160285-6161d139c74e4982a38d071e76d2522a-0-1bdd6a33fd4346d3c804ec8d3b6d4707" data-title="Cybersecurity Analyst Job Simulation - Forage (TCS)">
+                    <h3>Cybersecurity Analyst</h3>
+                    <p>Forage - TCS</p>
+                    <div class="certification-click-hint">
+                        <i class="fas fa-eye"></i> Click to view certificate
+                    </div>
+                </div>
+                <div class="certification-card" data-certificate="https://z-cdn-media.chatglm.cn/files/8318ed10-26f6-4b4f-a540-a7c9192139a6.jpg?auth_key=1887160926-b6bfc15824314e2683c0d5ce6c7b1708-0-9771d1abec499e68924a20fba4c3bf30" data-title="Certified Network Security Practitioner (CNSP) - PentestingExams.com">
+                    <h3>Certified Network Security Practitioner (CNSP)</h3>
+                    <p>PentestingExams.com</p>
+                    <div class="certification-click-hint">
+                        <i class="fas fa-eye"></i> Click to view certificate
+                    </div>
+                </div>
+                <div class="certification-card" data-certificate="" data-title="CEH - EC-Council">
                     <h3>CEH (EC-Council)</h3>
                     <p>Ongoing</p>
-                </div>
-                <div class="certification-card">
-                    <h3>CyberSecurity Analyst</h3>
-                    <p>Forage</p>
+                    <div class="certification-click-hint" style="color: #ffbd2e;">
+                        <i class="fas fa-hourglass-half"></i> In Progress
+                    </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Certificate Modal -->
+    <div class="certificate-modal" id="certificateModal">
+        <div class="certificate-modal-content">
+            <span class="certificate-close" id="certificateClose">&times;</span>
+            <img src="" alt="Certificate" id="certificateImage">
+            <div class="certificate-modal-title" id="certificateTitle"></div>
+        </div>
+    </div>
 
     <!-- Contact Section -->
     <section id="contact" class="contact">
@@ -1277,7 +1366,7 @@
                         <i class="fab fa-linkedin"></i>
                         <div>
                             <h3>LinkedIn</h3>
-                            <p>linkedin.com/in/sanjaym-b64258294</p>
+                            <p>linkedin.com/in/sanjay-m-b64258294</p>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -1324,12 +1413,12 @@
     <footer>
         <div class="container">
             <div class="social-links">
-                <a href="https://linkedin.com/in/sanjaym-b64258294" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://linkedin.com/in/sanjay-m-b64258294" target="_blank"><i class="fab fa-linkedin"></i></a>
                 <a href="https://github.com/2005Sanjay" target="_blank"><i class="fab fa-github"></i></a>
                 <a href="https://tryhackme.com/p/Sanjay28" target="_blank"><i class="fas fa-user-secret"></i></a>
                 <a href="mailto:sanjaymeenakumar06@gmail.com"><i class="fas fa-envelope"></i></a>
             </div>
-            <p>&copy; 2023 Sanjay M. All Rights Reserved.</p>
+            <p>&copy; 2025 Sanjay M. All Rights Reserved.</p>
         </div>
     </footer>
 
@@ -1338,31 +1427,22 @@
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
             });
         });
 
         // Form submission
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // Get form values
             const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-            const message = document.getElementById('message').value;
-            
-            // Here you would normally send the form data to a server
-            // For this example, we'll just show a success message
             alert(`Thank you, ${name}! Your message has been sent successfully.`);
-            
-            // Reset the form
             this.reset();
         });
 
-        // Add scroll effect to header
+        // Scroll effect to header
         window.addEventListener('scroll', function() {
             const header = document.querySelector('header');
             if (window.scrollY > 100) {
@@ -1370,6 +1450,137 @@
             } else {
                 header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.5)';
             }
+        });
+
+        // Rotating Hero Subtitle
+        const roles = [
+            "Aspiring Cybersecurity Student | Ethical Hacker | CTF Enthusiast",
+            "Bug Hunter | Founder of Team Ph@nt0m R00tkits (CTF Team)",
+            "Blue Teamer | Threat Intelligence Enthusiast",
+            "Java Developer | Secure Coding Advocate",
+            "Network Security Practitioner | CNSP Certified"
+        ];
+        let currentRoleIndex = 0;
+        const heroSubtitle = document.getElementById('hero-subtitle');
+
+        setInterval(() => {
+            heroSubtitle.classList.add('fade-out');
+            
+            setTimeout(() => {
+                currentRoleIndex = (currentRoleIndex + 1) % roles.length;
+                heroSubtitle.textContent = roles[currentRoleIndex];
+                heroSubtitle.classList.remove('fade-out');
+            }, 500);
+        }, 5000);
+
+        // Certificate Modal Logic
+        const modal = document.getElementById('certificateModal');
+        const modalImg = document.getElementById('certificateImage');
+        const modalTitle = document.getElementById('certificateTitle');
+        const closeBtn = document.getElementById('certificateClose');
+
+        document.querySelectorAll('.certification-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const certPath = this.getAttribute('data-certificate');
+                const certTitle = this.getAttribute('data-title');
+
+                if (!certPath) {
+                    if (certTitle.includes("Ongoing") || certTitle.includes("In Progress")) {
+                        alert('This certification is currently in progress. Certificate will be available soon!');
+                    } else {
+                        alert('Certificate link is not available at the moment.');
+                    }
+                    return;
+                }
+
+                modalImg.src = certPath;
+                modalTitle.textContent = certTitle;
+                modal.classList.add('active');
+            });
+        });
+
+        closeBtn.addEventListener('click', function() {
+            modal.classList.remove('active');
+            modalImg.src = '';
+        });
+
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                modalImg.src = '';
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                modal.classList.remove('active');
+                modalImg.src = '';
+            }
+        });
+
+        // Interactive Terminal Logic
+        const terminalInput = document.getElementById('terminalInput');
+        const terminalBody = document.getElementById('terminalBody');
+        const heroTerminal = document.getElementById('heroTerminal');
+
+        const commands = {
+            help: "Available commands:\n  help      - List available commands\n  ls        - List directory contents\n  pwd       - Print working directory\n  whoami    - Print current user\n  clear     - Clear the terminal screen\n  cat       - Read file contents (e.g., cat about.txt)",
+            ls: "about.txt\nprojects/\ncertifications/\ncontact.txt\nresume.pdf",
+            pwd: "/home/sanjay/portfolio",
+            whoami: "sanjay",
+            "cat about.txt": "A passionate 4th-year Cybersecurity student. Scroll down to learn more!",
+            "cat contact.txt": "Email: sanjaymeenakumar06@gmail.com\nPhone: +91 6374404194\nLocation: Madurai, Tamil Nadu, India",
+            "cat resume.pdf": "Downloading resume... (Just kidding, check the Contact section!)",
+            "ls -la": "drwxr-xr-x  2 sanjay sanjay 4096 Jan  1 12:00 .\ndrwxr-xr-x  3 root  root  4096 Jan  1 12:00 ..\n-rw-r--r--  1 sanjay sanjay  512 Jan  1 12:00 about.txt\n-rw-r--r--  1 sanjay sanjay  512 Jan  1 12:00 contact.txt\n-rw-r--r--  1 sanjay sanjay  512 Jan  1 12:00 resume.pdf",
+            echo: "Usage: echo [string]"
+        };
+
+        function executeCommand(cmd) {
+            const trimmedCmd = cmd.trim().toLowerCase();
+            
+            const promptLine = document.createElement('div');
+            promptLine.classList.add('hero-terminal-line');
+            promptLine.innerHTML = `<span class="hero-terminal-prompt">sanjay@portfolio:~$</span> ${cmd}`;
+            terminalBody.appendChild(promptLine);
+
+            if (trimmedCmd === '') {
+                // Do nothing for empty input
+            } else if (trimmedCmd === 'clear') {
+                terminalBody.innerHTML = '';
+                return;
+            } else if (trimmedCmd.startsWith('echo ')) {
+                const output = cmd.substring(5);
+                const outputLine = document.createElement('div');
+                outputLine.classList.add('hero-terminal-line');
+                outputLine.textContent = output;
+                terminalBody.appendChild(outputLine);
+            } else if (commands[trimmedCmd]) {
+                const outputLine = document.createElement('div');
+                outputLine.classList.add('hero-terminal-line');
+                outputLine.textContent = commands[trimmedCmd];
+                terminalBody.appendChild(outputLine);
+            } else {
+                const outputLine = document.createElement('div');
+                outputLine.classList.add('hero-terminal-line');
+                outputLine.textContent = `bash: ${cmd.split(' ')[0]}: command not found. Type 'help' for available commands.`;
+                terminalBody.appendChild(outputLine);
+            }
+
+            // Scroll to bottom of terminal
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+
+        terminalInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const cmd = terminalInput.value;
+                executeCommand(cmd);
+                terminalInput.value = '';
+            }
+        });
+
+        // Focus the terminal input when clicking anywhere on the terminal box
+        heroTerminal.addEventListener('click', function() {
+            terminalInput.focus();
         });
     </script>
 </body>
