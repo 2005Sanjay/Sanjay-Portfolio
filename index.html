@@ -15,6 +15,7 @@
             --text-color: #e6e6e6;
             --terminal-green: #00ff00;
             --code-blue: #569cd6;
+            --thm-red: #FF0000; /* TryHackMe Red */
         }
 
         * {
@@ -88,10 +89,11 @@
         .nav-links {
             display: flex;
             list-style: none;
+            flex-wrap: wrap;
         }
 
         .nav-links li {
-            margin-left: 2rem;
+            margin-left: 1.5rem;
         }
 
         .nav-links a {
@@ -99,6 +101,7 @@
             text-decoration: none;
             transition: color 0.3s;
             font-weight: bold;
+            font-size: 0.95rem;
         }
 
         .nav-links a:hover {
@@ -160,7 +163,6 @@
             opacity: 0;
         }
 
-        /* Hero Buttons Layout */
         .hero-buttons {
             display: flex;
             gap: 1rem;
@@ -408,6 +410,76 @@
             margin-bottom: 1rem;
             font-size: 1.5rem;
             text-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
+        }
+
+        /* TryHackMe Stats Section */
+        .thm-stats {
+            background-color: rgba(0, 0, 0, 0.92);
+        }
+
+        .thm-card {
+            background-color: rgba(20, 20, 20, 0.9);
+            border: 1px solid rgba(229, 9, 20, 0.4);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .thm-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 25px rgba(229, 9, 20, 0.3);
+        }
+
+        .thm-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .thm-username {
+            color: #fff;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .thm-rank {
+            color: var(--terminal-green);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .thm-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .thm-stat-item {
+            background: rgba(229, 9, 20, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(229, 9, 20, 0.2);
+        }
+
+        .thm-stat-value {
+            display: block;
+            font-size: 2rem;
+            color: var(--primary-color);
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+        }
+
+        .thm-stat-label {
+            color: var(--text-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .skills-container {
@@ -679,7 +751,7 @@
             left: -10px;
             width: 20px;
             height: 20px;
-            background-color: rgba(20,20,20,0.95);
+            background-color: rgba(20, 20, 20, 0.95);
             transform: rotate(45deg);
             z-index: -1;
             border-left: 1px solid var(--primary-color);
@@ -925,6 +997,7 @@
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#leadership">Leadership</a></li>
+                <li><a href="#tryhackme">TryHackMe</a></li>
                 <li><a href="#skills">Skills</a></li>
                 <li><a href="#patent">Patent</a></li>
                 <li><a href="#projects">Projects</a></li>
@@ -1011,6 +1084,39 @@
                     <h3>Build Club</h3>
                     <p>Core Member of the Build Club at PSNA College, contributing to innovative projects and fostering a collaborative environment for technical skill development.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TryHackMe Stats Section -->
+    <section id="tryhackme" class="thm-stats">
+        <div class="container">
+            <div class="section-title">
+                <h2>TryHackMe Stats</h2>
+            </div>
+            <div class="thm-card">
+                <div class="thm-icon"><i class="fas fa-user-secret"></i></div>
+                <div class="thm-username">Sanjay28</div>
+                <div class="thm-rank"><i class="fas fa-trophy"></i> Global Rank: Top 2%</div>
+                
+                <div class="thm-grid">
+                    <div class="thm-stat-item">
+                        <span class="thm-stat-value">200</span>
+                        <span class="thm-stat-label">Rooms Completed</span>
+                    </div>
+                    <div class="thm-stat-item">
+                        <span class="thm-stat-value">29</span>
+                        <span class="thm-stat-label">Badges Earned</span>
+                    </div>
+                    <div class="thm-stat-item">
+                        <span class="thm-stat-value">Top 2%</span>
+                        <span class="thm-stat-label">Global Rank</span>
+                    </div>
+                </div>
+                
+                <a href="https://tryhackme.com/p/Sanjay28" target="_blank" class="btn">
+                    View Full Profile <i class="fas fa-external-link-alt"></i>
+                </a>
             </div>
         </div>
     </section>
